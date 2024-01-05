@@ -181,7 +181,7 @@ void viewEntrepreneurs()
 void editEntrepreneur()
 {
     int idToEdit;
-    printf("Enter Entrepreneur ID to edit: ");
+    printf("Enter Entrepreneur ID to edit:");
     scanf("%d", &idToEdit);
 
     FILE *inputFile = openFile(ENTREPRENEURS_FILE, "r");
@@ -391,6 +391,7 @@ void addEnrollmentToArray(struct Enrollment enrollment)
         printf("Maximum number of enrollments reached. Cannot add more.\n");
     }
 }
+//decelear the function to genrate report
 void generateReports()
 {
     struct Enrollment enrollment;
@@ -443,9 +444,7 @@ void closeFile(FILE *file)
 int getNextID(char *filePath)
 {
     FILE* file = openFile(filePath, "r");
-
     int id = 1; // Default starting ID
-
     if (file != NULL)
     {
         fseek(file, 0, SEEK_END);
