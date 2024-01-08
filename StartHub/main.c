@@ -10,7 +10,7 @@
 #define ENTREPRENEURS_FILE "entrepreneurs.txt"
 #define INVESTORS_FILE "investors.txt"
 #define ENROLLMENTS_FILE "enrollments.txt"
-#define EOF (-1)
+
 // Data structure for entrepreneurs
 struct Entrepreneur
 {
@@ -181,7 +181,7 @@ void viewEntrepreneurs()
 void editEntrepreneur()
 {
     int idToEdit;
-    printf("Enter Entrepreneur ID to edit:");
+    printf("Enter Entrepreneur ID to edit: ");
     scanf("%d", &idToEdit);
 
     FILE *inputFile = openFile(ENTREPRENEURS_FILE, "r");
@@ -253,10 +253,10 @@ void viewInvestors()
     FILE *file = openFile(INVESTORS_FILE, "r");
 
     printf("\nInvestors List\n");
-    printf("ID  Name  Address  Phone Number  Pin Code\n");
+    printf("ID  Name     Address  Phone Number  Pin Code\n");
 
     struct Investor investor;
-    while (fscanf(file, "%d %s %s %s %s", &investor.ID, investor.name, investor.address, investor.phoneNumber, investor.pinCode)==5 || !feof(file))
+    while (fscanf(file, "%d %s %s %s %s", &investor.ID, investor.name, investor.address, investor.phoneNumber, investor.pinCode) != EOF)
     {
         printf("%-4d%-10s%-10s%-15s%-10s\n", investor.ID, investor.name, investor.address, investor.phoneNumber, investor.pinCode);
     }//end of while
@@ -356,7 +356,7 @@ void binarySearchEnrollment()
     int found = 0;
 
     while (fscanf(file, "%d %d %d %s %s", &enrollment.enrollmentID, &enrollment.entrepreneurID, &enrollment.investorID,
-                  enrollment.investorName, enrollment.submissionDate) == 5)
+                  enrollment.investorName, enrollment.submissionDate) !=EOF)
     {
 
         if (enrollment.enrollmentID == targetID)
@@ -391,7 +391,6 @@ void addEnrollmentToArray(struct Enrollment enrollment)
         printf("Maximum number of enrollments reached. Cannot add more.\n");
     }
 }
-//decelear the function to genrate report
 void generateReports()
 {
     struct Enrollment enrollment;
@@ -400,9 +399,7 @@ void generateReports()
     printf("\n--------------------- Enrollment Report ---------------------\n");
     printf("Enrollment ID  Entrepreneur ID  Investor ID  Investor Name  Submission Date\n");
 
-
-
-    while (fscanf(file, "%d %d %d %s %s", &enrollment.enrollmentID, &enrollment.entrepreneurID, &enrollment.investorID,
+    while (fscanf(file, "%d %d %d %19s %19s", &enrollment.enrollmentID, &enrollment.entrepreneurID, &enrollment.investorID,
                   enrollment.investorName, enrollment.submissionDate) ==5)
     {
 
@@ -444,7 +441,9 @@ void closeFile(FILE *file)
 int getNextID(char *filePath)
 {
     FILE* file = openFile(filePath, "r");
+
     int id = 1; // Default starting ID
+
     if (file != NULL)
     {
         fseek(file, 0, SEEK_END);
@@ -452,7 +451,7 @@ int getNextID(char *filePath)
         {
             rewind(file);
             fscanf(file, "%*d"); // Skip the first field (ID)
-            while (fscanf(file, "%*s") ==5 || !feof(file))
+            while (fscanf(file, "%*s") !=EOF)
             {
                 id++;
             }
